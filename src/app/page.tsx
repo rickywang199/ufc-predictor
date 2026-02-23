@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { SignInButtonGithub } from "./components/sign-in-button-github";
 import { SignOutButtonGithub } from "./components/sign-out-button-github";
 import { SignInButtonEmail } from "./components/sign-in-button-email";
+import { SignInButtonGoogle } from "./components/sign-in-button-google";
 
 export default async function Home() {
   const session = await auth()
@@ -12,6 +13,7 @@ export default async function Home() {
         <div>
           <SignInButtonGithub />
           <SignInButtonEmail />
+          <SignInButtonGoogle />
         </div>
       ) 
       }

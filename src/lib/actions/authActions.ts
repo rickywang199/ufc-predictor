@@ -11,6 +11,9 @@ export async function logoutWithGithub() {
   await signOut({ redirectTo: "/" });
 }
 
+export async function loginWithGoogle() {
+  await signIn("google", { redirectTo: "/" });
+}
 
 export async function loginWithEmail(email: string) {
   await signIn("resend", { email ,redirectTo: "/" });
