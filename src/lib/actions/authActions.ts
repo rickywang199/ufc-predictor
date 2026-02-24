@@ -14,7 +14,3 @@ export async function logoutWithGithub() {
 export async function loginWithGoogle() {
   await signIn("google", { redirectTo: "/" });
 }
-
-export async function loginWithEmail(email: string) {
-  await signIn("resend", { email ,redirectTo: "/" });
-}
