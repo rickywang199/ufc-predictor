@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { SignInButtonGithub } from "./components/sign-in-button-github";
 import { SignOutButtonGithub } from "./components/sign-out-button-github";
 import { SignInButtonGoogle } from "./components/sign-in-button-google";
+import { SignInWithCredentials } from "./components/sign-in-credentials";
 
 
 export default async function Home() {
@@ -15,6 +16,7 @@ export default async function Home() {
           <div>
             <SignInButtonGithub />
             <SignInButtonGoogle />
+            <SignInWithCredentials/>
           </div>
         ) 
         }
