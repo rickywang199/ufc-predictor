@@ -12,6 +12,32 @@ export const RegisterWithCredentials = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
+    const handleRegister = async() => {
+        setError("")
+        if (username ===""){
+            return setError("Username cannot be empty")
+        }
+        if (username.length < 3){
+            return setError("Username must be at least 3 characters long")
+        }
+        if (username.length > 20){
+            return setError("Username cannot be longer than 20 characters")
+        }
+
+        if (email === ""){
+            return setError("Email cannot be empty")
+        }
+        if (!email.includes("@") || !email.includes(".")){
+            return setError("Please enter a valid email address")
+        }
+        if (password !== confirmPassword) {
+            return setError("Passwords do not match")
+        }
+        const result = await registerWithCredentials(username, email, password);
+        if (result.error){
+            setError(result.error)
+        }
+    }
     return(
         <div className="flex flex-col text-black placeholder-gray-500">
                     <div className="text-sm font-bold">Username</div>
@@ -24,12 +50,7 @@ export const RegisterWithCredentials = () => {
                     <input value= {confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm your password" type="password"  className="border border-gray-100 bg-gray-100 rounded-lg p-2 mb-5"/>
                     {error && <div className="text-red-500 text-sm mb-3">{error}</div>}    
                     <button className="justify-center flex items-center gap-3 text-base font-bold text-white border border-gray-300 rounded-lg p-2 hover:bg-teal-700 w-full bg-teal-600"  
-                            onClick={() => {setError("")
-                                            if (password === confirmPassword) {
-                                                registerWithCredentials(username, password, email)}
-                                            else{
-                                                setError("Passwords do not match")}
-                                            }}> Create account <MdArrowForward></MdArrowForward> </button>
+                            onClick={handleRegister}> Create account <MdArrowForward></MdArrowForward> </button>
                 </div>
     )
 };

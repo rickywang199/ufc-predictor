@@ -23,8 +23,13 @@ export async function loginWithCredentials(username: string, password: string) {
 
 
 export async function registerWithCredentials(username: string, password: string, email:string) {
+  if (await prisma.user.findUnique({where: {username}})){
+    return {error: "Username already exists"}
+  }
+  if (await prisma.user.findUnique({where: {email}})){
+    return {error: "Email already exists"}
+  }
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await prisma.user.create({
-  data: { username: username, password: hashedPassword, email: email},
-  });
+  const user = await prisma.user.create({data: { username: username, password: hashedPassword, email: email}});
+  return {success: true};
 }
