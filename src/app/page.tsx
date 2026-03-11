@@ -3,6 +3,7 @@ import { SignInButtonGithub } from "./components/sign-in-button-github";
 import { SignOutButtonGithub } from "./components/sign-out-button-github";
 import { SignInButtonGoogle } from "./components/sign-in-button-google";
 import { SignInWithCredentials } from "./components/sign-in-credentials";
+import Link from 'next/link'
 
 
 export default async function Home() {
@@ -24,6 +25,10 @@ export default async function Home() {
               <div className="flex-grow border-t border-gray-300"></div>
             </div>
             <div><SignInWithCredentials/></div>
+            <div className="flex items-center justify-center mt-5 gap-1 text-sm text-gray-500">
+              <span>Don't have an account? </span>
+              <Link href="/register" className="placeholder-black font-bold hover:underline">Sign up</Link>
+            </div>
           </div>
         ) 
         }
