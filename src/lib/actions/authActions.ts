@@ -18,7 +18,13 @@ export async function logoutWithGithub() {
 }
 
 export async function loginWithCredentials(username: string, password: string) {
-  await signIn("credentials", { username, password, redirectTo: "/" });
+  try{
+    await signIn("credentials", { username, password, redirectTo: "/"})
+    return {success: true}
+  }
+  catch(error){
+    return {error: "Invalid username or password"}
+  }
 }
 
 

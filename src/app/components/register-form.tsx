@@ -18,42 +18,42 @@ export const RegisterWithCredentials = () => {
     const handleRegister = async() => {
         setError("")
         if (username ===""){
-            return setError("Username cannot be empty")
+            return setError("Username cannot be empty");
         }
         if (username.length < 3){
-            return setError("Username must be at least 3 characters long")
+            return setError("Username must be at least 3 characters long");
         }
         if (username.length > 20){
-            return setError("Username cannot be longer than 20 characters")
+            return setError("Username cannot be longer than 20 characters");
         }
 
         if (email === ""){
-            return setError("Email cannot be empty")
+            return setError("Email cannot be empty");
         }
         if (!email.includes("@") || !email.includes(".")){
-            return setError("Please enter a valid email address")
+            return setError("Please enter a valid email address");
         }
         if (password === ""){
-            return setError("Password cannot be empty")
+            return setError("Password cannot be empty");
         }
         if (password.length < 6){
-            return setError("Password must be at least 6 characters long")
+            return setError("Password must be at least 6 characters long");
         }
         if (password !== confirmPassword) {
-            return setError("Passwords do not match")
+            return setError("Passwords do not match");
         }
         const result = await registerWithCredentials(username, password, email);
         if (result.error){
-            setError(result.error)
+            setError(result.error);
         }
         if (result.success){
             setSuccess("Account created successfully! Redirecting to login page...")
             setTimeout(() => {
-                router.push("/");
+                router.push("/")
             }, 3000);
         }
     }
-    
+
     return(
         <div className="flex flex-col text-black placeholder-gray-500">
                     <div className="text-sm font-bold">Username</div>
