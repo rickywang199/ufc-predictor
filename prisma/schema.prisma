@@ -14,15 +14,11 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-enum ApplicationStatus {
-  SAVED
-  APPLIED
-  OA
-  INTERVIEW
-  REJECTED
-  OFFER
-  GHOSTED
-  WITHDRAWN
+enum fightStatus {
+  WON
+  LOST
+  TIED
+  CANCELED
 }
 
 model User {
@@ -38,7 +34,6 @@ model User {
 
   accounts     Account[]
   sessions     Session[]
-  applications Application[]
 }
 
 model Account {
@@ -78,47 +73,88 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Application {
-  id     String @id @default(uuid())
-  userId String
 
-  //user ID is foreign key, it references id in User, and onDelete:Cascade means if user gets deleted all its associated applications will also
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Fighter{
+  id                  String  @id @default(cuid())
+  fighterFirstName    String
+  fighterLastName     String
+  fighterNationality  String
+  fighterStatsId      String  @unique
+  weightClass         String
+  fighterClass        String
+  fighterSubClass     String
 
-  company  String
-  role     String
-  location String?
-  url      String?
-  status   ApplicationStatus @default(SAVED)
+  winRecord       Int
+  lossRecord      Int
+  tieRecord       Int
+  winPct          Float
 
-  appliedAt DateTime
-  salary    Int?
+  totalElo        Int
+  strikingElo     Int
+  grapplingElo    Int
 
-  notes     Note[]
-  contacts  Contact[]
-  updatedAt DateTime  @updatedAt
-  createdAt DateTime  @default(now())
+  fighterStats FighterStats @relation(fields: [fighterStatsId], references: [id], onDelete: Cascade)
+
 }
 
-model Note {
-  id            String      @id @default(cuid())
-  applicationID String
-  application   Application @relation(fields: [applicationID], references: [id], onDelete: Cascade)
-  text          String
-  updatedAt     DateTime    @updatedAt
-  createdAt     DateTime    @default(now())
+
+model FighterStats{
+  id  String  @id @default(cuid())
+  fighter Fighter?
+  strikingStatsId    String  @unique
+  grapplingStatsId   String  @unique
+
+  strikingStats StrikingStats @relation(fields: [strikingStatsId], references: [id], onDelete: Cascade)
+  grapplingStats GrapplingStats @relation(fields: [grapplingStatsId], references: [id], onDelete: Cascade)
 }
 
-model Contact {
-  id            String      @id @default(cuid())
-  applicationID String
-  application   Application @relation(fields: [applicationID], references: [id], onDelete: Cascade)
-  firstName     String?
-  lastName      String?
-  email         String?
-  role          String?
-  linkedin      String?
-  notes         String?
-  updatedAt     DateTime    @updatedAt
-  createdAt     DateTime    @default(now())
+
+
+model StrikingStats {
+  id String @id @default(cuid())
+  fighterStats FighterStats?
+  //avgerage offensive strikes
+  avgKd               Float
+  avgSigStr           Float
+  avgSigStrPct        Float
+  avgTotalStr         Float
+  // By target
+  avgHeadStr          Float
+  avgBodyStr          Float
+  avgLegStr           Float
+  // By position
+  avgDistanceStr      Float
+  avgClinchStr        Float
+  avgGroundStr        Float
+
+  //average defensive strikes
+  avgSigStrAbsorbedPct  Float //calculates the average amount of shots the fighter took in percentage
+  avgSigStrAbs          Float 
+  avgHeadAbs            Float
+  avgBodyAbs            Float
+  avgLegAbs             Float
+  avgKdReceived         Float
+
+
 }
+
+model GrapplingStats {
+  id String @id @default(cuid())
+  fighterStats FighterStats?
+
+  //offensive grappling
+  avgTd               Float
+  avgTdPct            Float
+  avgSubAtt           Float
+  avgReversals        Float
+  avgControlTimeSec   Int
+  
+
+  //defensive
+  avgTdAbsorbed       Float
+  avgTdDefPct         Float  // opponent's TD% against this fighter
+  avgSubAttReceived   Float
+  avgReversalsGiven   Float
+  avgTimeControlled   Int
+}
+
