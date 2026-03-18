@@ -84,6 +84,7 @@ model Fighter{
   fighterClass        String
   fighterSubClass     String
 
+  fighterAge      Int
   winRecord       Int
   lossRecord      Int
   tieRecord       Int
