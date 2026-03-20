@@ -21,6 +21,13 @@ enum fightStatus {
   CANCELED
 }
 
+enum MethodOfVictory{
+  KO_TKO
+  UNANIMOUS_DECISION
+  SPLIT_DECISION
+  SUBMISSION
+}
+
 model User {
   id        String   @id @default(uuid())
   name          String?
@@ -76,10 +83,11 @@ model VerificationToken {
 
 model Fighter{
   id                  String  @id @default(cuid())
+  avgFighterStatsId   String  @unique
+
   fighterFirstName    String
   fighterLastName     String
   fighterNationality  String
-  fighterStatsId      String  @unique
   weightClass         String
   fighterClass        String
   fighterSubClass     String
@@ -94,26 +102,111 @@ model Fighter{
   strikingElo     Int
   grapplingElo    Int
 
-  fighterStats FighterStats @relation(fields: [fighterStatsId], references: [id], onDelete: Cascade)
+  avgFighterStats AvgFighterStats @relation(fields: [avgFighterStatsId], references: [id], onDelete: Cascade)
+  fightsAsFighter1 FightResults[] @relation("fighter1")
+  fightsAsFighter2 FightResults[] @relation("fighter2")
+  perFightStats PerFightStats[]
 
 }
 
+model FightResults {
+  id String @id @default(cuid())
+  fighter1Id        String
+  fighter2Id        String
 
-model FighterStats{
+  fighterStatus1    fightStatus
+  fighterStatus2    fightStatus
+
+  fightName         String
+  fightBout         String
+  fightWeightClass  String
+  methodOfVictory   MethodOfVictory
+  roundsLasted      Int
+  roundsScheduled   Int
+
+  fighter1 Fighter @relation("fighter1", fields: [fighter1Id], references: [id])
+  fighter2 Fighter @relation("fighter2", fields: [fighter2Id], references: [id])
+
+  perFightStats PerFightStats[]
+}
+
+
+model PerFightStats{
+  id  String      @id @default(cuid())
+  fighterId       String
+  fightResultsId  String
+
+  perStrikingStatsId    String  @unique
+  perGrapplingStatsId   String  @unique
+
+  fighter Fighter @relation(fields: [fighterId], references: [id])
+  fightResult FightResults @relation(fields: [fightResultsId], references: [id])
+  perStrikingStats PerStrikingStats @relation(fields: [perStrikingStatsId], references: [id], onDelete: Cascade)
+  perGrapplingStats PerGrapplingStats @relation(fields: [perGrapplingStatsId], references: [id], onDelete: Cascade)
+}
+
+model PerStrikingStats{
+  id String @id @default(cuid())
+  perFightStats   PerFightStats?
+  //avgerage offensive strikes
+  kd               Int
+  sigStr           Int
+  sigStrPct        Float
+  totalStr         Int
+
+  // By target
+  headStr          Int
+  bodyStr          Int
+  legStr           Int
+
+  // By position
+  distanceStr      Int
+  clinchStr        Int
+  groundStr        Int
+
+  //average defensive strikes
+  sigStrAbsorbedPct  Float //calculates the average amount of shots the fighter took in percentage
+  sigStrAbs          Int
+  headAbs            Int
+  bodyAbs            Int
+  legAbs             Int
+  kdReceived         Int
+}
+
+model PerGrapplingStats{
+  id String @id @default(cuid())
+  perFightStats   PerFightStats?
+  //offensive grappling
+  td               Int
+  tdPct            Float
+  subAtt           Int
+  reversals        Int
+  controlTimeSec   Int
+  
+
+  //defensive
+  tdAbsorbed       Int
+  tdDefPct         Int  // 100 - opponent's TD% against this fighter
+  subAttReceived   Int
+  reversalsGiven   Int
+  timeControlled   Int
+}
+
+model AvgFighterStats{
   id  String  @id @default(cuid())
   fighter Fighter?
-  strikingStatsId    String  @unique
-  grapplingStatsId   String  @unique
+  avgStrikingStatsId    String  @unique
+  avgGrapplingStatsId   String  @unique
 
-  strikingStats StrikingStats @relation(fields: [strikingStatsId], references: [id], onDelete: Cascade)
-  grapplingStats GrapplingStats @relation(fields: [grapplingStatsId], references: [id], onDelete: Cascade)
+  strikingStats AvgStrikingStats @relation(fields: [avgStrikingStatsId], references: [id], onDelete: Cascade)
+  grapplingStats AvgGrapplingStats @relation(fields: [avgGrapplingStatsId], references: [id], onDelete: Cascade)
 }
 
 
 
-model StrikingStats {
+model AvgStrikingStats {
   id String @id @default(cuid())
-  fighterStats FighterStats?
+  fighterStats AvgFighterStats?
   //avgerage offensive strikes
   avgKd               Float
   avgSigStr           Float
@@ -139,9 +232,9 @@ model StrikingStats {
 
 }
 
-model GrapplingStats {
+model AvgGrapplingStats {
   id String @id @default(cuid())
-  fighterStats FighterStats?
+  fighterStats AvgFighterStats?
 
   //offensive grappling
   avgTd               Float
@@ -158,4 +251,6 @@ model GrapplingStats {
   avgReversalsGiven   Float
   avgTimeControlled   Int
 }
+
+
 
