@@ -83,7 +83,7 @@ model VerificationToken {
 
 model Fighter{
   id                  String  @id @default(cuid())
-  avgFighterStatsId   String  @unique
+  avgFighterStats     AvgFighterStats?
 
   fighterFirstName    String
   fighterLastName     String
@@ -93,6 +93,8 @@ model Fighter{
   fighterSubClass     String
 
   fighterAge      Int
+  fighterArmReach Float
+
   winRecord       Int
   lossRecord      Int
   tieRecord       Int
@@ -102,7 +104,6 @@ model Fighter{
   strikingElo     Int
   grapplingElo    Int
 
-  avgFighterStats AvgFighterStats @relation(fields: [avgFighterStatsId], references: [id], onDelete: Cascade)
   fightsAsFighter1 FightResults[] @relation("fighter1")
   fightsAsFighter2 FightResults[] @relation("fighter2")
   perFightStats PerFightStats[]
@@ -194,10 +195,11 @@ model PerGrapplingStats{
 
 model AvgFighterStats{
   id  String  @id @default(cuid())
-  fighter Fighter?
+  fighterId             String  @unique
   avgStrikingStatsId    String  @unique
   avgGrapplingStatsId   String  @unique
 
+  fighter Fighter @relation(fields: [fighterId],references: [id])
   strikingStats AvgStrikingStats @relation(fields: [avgStrikingStatsId], references: [id], onDelete: Cascade)
   grapplingStats AvgGrapplingStats @relation(fields: [avgGrapplingStatsId], references: [id], onDelete: Cascade)
 }
