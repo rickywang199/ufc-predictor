@@ -21,11 +21,23 @@ enum fightStatus {
   CANCELED
 }
 
+// enum fighterStatus{
+//   ACTIVE
+//   RETIRED
+//   INJURED
+//   SUSPENDED
+//   CUT
+// }
+
 enum MethodOfVictory{
   KO_TKO
-  UNANIMOUS_DECISION
-  SPLIT_DECISION
   SUBMISSION
+  UNANIMOUS_DECISION
+  MAJORITY_DECISION
+  SPLIT_DECISION
+  NO_CONTEST
+  DQ //disqualification
+  DOCTOR_STOPPAGE
 }
 
 model User {
@@ -82,27 +94,30 @@ model VerificationToken {
 
 
 model Fighter{
-  id                  String  @id @default(cuid())
-  avgFighterStats     AvgFighterStats?
+  id                      String  @id @default(cuid())
+  avgFighterStats         AvgFighterStats?
 
-  fighterFirstName    String
-  fighterLastName     String
-  fighterNationality  String
-  weightClass         String
-  fighterClass        String
-  fighterSubClass     String
+  fighterFirstName        String
+  fighterLastName         String
+  // fighterNationality      String
+  
+  fighterClass            String
+  fighterSubClass         String
 
-  fighterAge      Int
-  fighterArmReach Float
+  fighterDOB              DateTime
+  fighterHeight           Float
+  fighterArmReach         Float
+  fighterWeight           Float
+  fighterStance           String
 
-  winRecord       Int
-  lossRecord      Int
-  tieRecord       Int
-  winPct          Float
+  // currentFighterStatus    fighterStatus //whether the fighter is active, injured or retired
+  winRecord               Int
+  lossRecord              Int
+  tieRecord               Int
 
-  totalElo        Int
-  strikingElo     Int
-  grapplingElo    Int
+  totalElo                Int
+  strikingElo             Int
+  grapplingElo            Int
 
   fightsAsFighter1 FightResults[] @relation("fighter1")
   fightsAsFighter2 FightResults[] @relation("fighter2")
@@ -118,10 +133,11 @@ model FightResults {
   fighterStatus1    fightStatus
   fighterStatus2    fightStatus
 
-  fightName         String
-  fightBout         String
+  eventName         String  // event name like : UFC 322 or UFC Fight Night: Emmett vs. Vallejos
+  fightBout         String  // who vs who: Josh Emmett vs. Kevin Vallejos
+  fightDate         DateTime
   fightWeightClass  String
-  methodOfVictory   MethodOfVictory
+  methodOfVictory   MethodOfVictory?
   roundsLasted      Int
   roundsScheduled   Int
 
@@ -144,6 +160,8 @@ model PerFightStats{
   fightResult FightResults @relation(fields: [fightResultsId], references: [id])
   perStrikingStats PerStrikingStats @relation(fields: [perStrikingStatsId], references: [id], onDelete: Cascade)
   perGrapplingStats PerGrapplingStats @relation(fields: [perGrapplingStatsId], references: [id], onDelete: Cascade)
+
+  @@unique([fighterId, fightResultsId])  
 }
 
 model PerStrikingStats{
@@ -187,7 +205,7 @@ model PerGrapplingStats{
 
   //defensive
   tdAbsorbed       Int
-  tdDefPct         Int  // 100 - opponent's TD% against this fighter
+  tdDefPct         Float  // 100 - opponent's TD% against this fighter
   subAttReceived   Int
   reversalsGiven   Int
   timeControlled   Int
@@ -243,7 +261,7 @@ model AvgGrapplingStats {
   avgTdPct            Float
   avgSubAtt           Float
   avgReversals        Float
-  avgControlTimeSec   Int
+  avgControlTimeSec   Float
   
 
   //defensive
@@ -251,7 +269,7 @@ model AvgGrapplingStats {
   avgTdDefPct         Float  // opponent's TD% against this fighter
   avgSubAttReceived   Float
   avgReversalsGiven   Float
-  avgTimeControlled   Int
+  avgTimeControlled   Float
 }
 
 
