@@ -101,23 +101,23 @@ model Fighter{
   fighterLastName         String
   // fighterNationality      String
   
-  fighterClass            String
-  fighterSubClass         String
+  fighterClass            String?
+  fighterSubClass         String?
 
-  fighterDOB              DateTime
-  fighterHeight           Float
-  fighterArmReach         Float
-  fighterWeight           Float
-  fighterStance           String
+  fighterDOB              DateTime?
+  fighterHeight           Float?
+  fighterArmReach         Float?
+  fighterWeight           Float?
+  fighterStance           String?
 
   // currentFighterStatus    fighterStatus //whether the fighter is active, injured or retired
   winRecord               Int
   lossRecord              Int
   tieRecord               Int
 
-  totalElo                Int
-  strikingElo             Int
-  grapplingElo            Int
+  totalElo                Int?
+  strikingElo             Int?
+  grapplingElo            Int?
 
   fightsAsFighter1 FightResults[] @relation("fighter1")
   fightsAsFighter2 FightResults[] @relation("fighter2")
@@ -197,7 +197,7 @@ model PerGrapplingStats{
   perFightStats   PerFightStats?
   //offensive grappling
   td               Int
-  tdPct            Float
+  tdPct            Float?
   subAtt           Int
   reversals        Int
   controlTimeSec   Int
@@ -205,7 +205,7 @@ model PerGrapplingStats{
 
   //defensive
   tdAbsorbed       Int
-  tdDefPct         Float  // 100 - opponent's TD% against this fighter
+  tdDefPct         Float?  // 100 - opponent's TD% against this fighter
   subAttReceived   Int
   reversalsGiven   Int
   timeControlled   Int
@@ -257,7 +257,7 @@ model AvgGrapplingStats {
   fighterStats AvgFighterStats?
 
   //offensive grappling
-  avgTd               Float
+  avgTd               Float?
   avgTdPct            Float
   avgSubAtt           Float
   avgReversals        Float
@@ -266,7 +266,7 @@ model AvgGrapplingStats {
 
   //defensive
   avgTdAbsorbed       Float
-  avgTdDefPct         Float  // opponent's TD% against this fighter
+  avgTdDefPct         Float?  // opponent's TD% against this fighter
   avgSubAttReceived   Float
   avgReversalsGiven   Float
   avgTimeControlled   Float
