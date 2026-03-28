@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { SignInButtonGithub } from "./components/sign-in-button-github";
 import { SignInButtonGoogle } from "./components/sign-in-button-google";
 import { SignInWithCredentials } from "./components/sign-in-credentials";
-import { redirect, RedirectType } from 'next/navigation'
+import { redirect} from 'next/navigation'
 import Link from 'next/link'
 
 
@@ -29,7 +29,7 @@ export default async function Home() {
           </div>
           <div><SignInWithCredentials/></div>
           <div className="flex items-center justify-center mt-5 gap-1 text-sm text-[#800000]">
-            <span>Don't have an account? </span>
+            <span>Don&apos;t have an account? </span>
             <Link href="/register" className="placeholder-black font-bold hover:underline">Sign up</Link>
           </div>
         </div>

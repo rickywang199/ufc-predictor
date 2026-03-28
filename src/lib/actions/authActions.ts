@@ -22,7 +22,7 @@ export async function loginWithCredentials(username: string, password: string) {
     await signIn("credentials", { username, password, redirectTo: "/home"})
     return {success: true}
   }
-  catch(error){
+  catch{
     return {error: "Invalid username or password"}
   }
 }
@@ -38,6 +38,6 @@ export async function registerWithCredentials(username: string, password: string
     return {error: "Email already exists"}
   }
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await prisma.user.create({data: { username: normalizedUsername, password: hashedPassword, email: normalizedEmail}});
+  await prisma.user.create({data: { username: normalizedUsername, password: hashedPassword, email: normalizedEmail}});
   return {success: true};
 }
