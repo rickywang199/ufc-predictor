@@ -1,9 +1,18 @@
-import { fetchPage,generateAlphabeticalUrlFighter } from "./utils";
+import { fetchPage } from "./utils";
+import { generateAlphabeticalUrlFighter, parseFighterDetails } from "./fighter";
 
 
 
 // tests if fetchPage returns the html
 // fetchPage('http://ufcstats.com/statistics/events/completed').then($ => console.log($.html()))
 
-console.log(generateAlphabeticalUrlFighter())
+// console.log(generateAlphabeticalUrlFighter())
 
+
+
+async function main(){
+    const results = await parseFighterDetails(['http://ufcstats.com/statistics/fighters?char=a&page=all'])
+    console.log(results.slice(0, 10)) // just show first 5 fighters
+}
+
+main()
