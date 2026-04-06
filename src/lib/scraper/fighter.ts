@@ -24,7 +24,7 @@ export async function parseFighterDetails(listOfAlphabeticalUrls: string[]): Pro
     const fighterDetail: [string, string, string, string][] = []
 
     const fighterNames: string[] = []
-    const fighterLinks: string[] = []
+    const fighterUrls: string[] = []
 
 
     for(const url of listOfAlphabeticalUrls){
@@ -34,10 +34,10 @@ export async function parseFighterDetails(listOfAlphabeticalUrls: string[]): Pro
         fighterNames.push($(el).text().trim())
         const href = $(el).attr('href')
         if(href){
-            fighterLinks.push(href)
+            fighterUrls.push(href)
             }
         else{
-            fighterLinks.push('')
+            fighterUrls.push('')
         }
         }) // [firstname, lastname, nickname] and then [url, url, url] each url will be between the names 
            // = [firstname, url, lastname, url, nickname, url]
@@ -46,7 +46,7 @@ export async function parseFighterDetails(listOfAlphabeticalUrls: string[]): Pro
         const firstName = fighterNames[i]
         const lastName = fighterNames[i+1]
         const nickName= fighterNames[i+2]
-        const fighterUrl = fighterLinks[i]
+        const fighterUrl = fighterUrls[i]
 
         fighterDetail.push([firstName,lastName,nickName,fighterUrl]) // [firstname, lastname, nickname, url]
     }
@@ -75,11 +75,11 @@ export async function parseFighterTott(fighterDetails: [string, string, string, 
         const $ = await fetchPage(url)
 
         const name = `${fighter[0]} ${fighter[1]}`
-        const record = $('.b-content__title-record').text().trim()
+        const record = $('span.b-content__title-record').text().trim()
         fighterTott.push(name)
         fighterTott.push(record)
 
-        const tott = $('.b-list__box-list').first()
+        const tott = $('ul.b-list__box-list').first()
         tott.find('i').each((_,el)=>{
             const label = $(el).text().trim()
             const fullText = $(el).parent().text().trim()

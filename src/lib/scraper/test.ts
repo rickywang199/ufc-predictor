@@ -1,5 +1,6 @@
 import { fetchPage } from "./utils";
 import { generateAlphabeticalUrlFighter, parseFighterDetails,parseFighterTott } from "./fighter";
+import { parseEventDetails } from "./event";
 
 
 
@@ -11,10 +12,14 @@ import { generateAlphabeticalUrlFighter, parseFighterDetails,parseFighterTott } 
 
 
 async function main(){
-    const results = await parseFighterDetails(['http://ufcstats.com/statistics/fighters?char=a&page=all'])
-    console.log(results.slice(0, 10)) // just show first 5 fighters
-    const temp = await parseFighterTott(results.splice(0,10))
-    console.log(temp)
+    const url = "http://ufcstats.com/statistics/events/completed?page=all"
+    // const results = await parseFighterDetails(['http://ufcstats.com/statistics/fighters?char=a&page=all'])
+    // console.log(results.slice(0, 10)) // just show first 5 fighters
+    // const temp = await parseFighterTott(results.splice(0,10))
+    // console.log(temp)
+    const temp2 = await parseEventDetails(url)
+    console.log(temp2)
+
 }
 
 main()
