@@ -55,13 +55,13 @@ export async function parseFighterDetails(listOfAlphabeticalUrls: string[]): Pro
 
 class FighterClass {
   constructor(
-    public fighterName: string,
-    public fighterRecord: string,
-    public fighterHeight: string,
-    public fighterWeight: number,
-    public fighterReach: number,
-    public fighterStance: string,
-    public fightDateOfBirth: Date
+    public readonly fighterName: string,
+    public readonly fighterRecord: string,
+    public readonly fighterHeight: string,
+    public readonly fighterWeight: number,
+    public readonly fighterReach: number,
+    public readonly fighterStance: string,
+    public readonly fightDateOfBirth: Date
   ) {}
 }
 

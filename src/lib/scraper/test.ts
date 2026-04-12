@@ -1,6 +1,6 @@
 import { fetchPage } from "./utils";
 import { generateAlphabeticalUrlFighter, parseFighterDetails,parseFighterTott } from "./fighter";
-import { parseEventDetails } from "./event";
+import { parseEventDetails, parseFightDetails } from "./event";
 
 
 
@@ -17,8 +17,10 @@ async function main(){
     // console.log(results.slice(0, 10)) // just show first 5 fighters
     // const temp = await parseFighterTott(results.splice(0,10))
     // console.log(temp)
+    console.time("parseEventDetails")
     const temp2 = await parseEventDetails(url)
     console.log(temp2)
+    console.timeEnd("parseEventDetails")
 
 }
 
